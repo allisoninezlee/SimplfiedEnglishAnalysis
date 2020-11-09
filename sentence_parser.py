@@ -26,7 +26,15 @@ def open_pdf(fname):
     return pdf
 
 def extract_text(pdf):
+    page_text = []
+
     for page in pdf.pages:
-        print(page.extract_text())
-        
+        page_text.append(page.extract_text())
+
+    return page_text
+
+def get_sentences(page_text):
+    for text in page_text:
+        print(text)
+
 #if __name__ == "__main__":
