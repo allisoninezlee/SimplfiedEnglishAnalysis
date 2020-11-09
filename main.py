@@ -1,6 +1,8 @@
 import argparse
 import os
 from os import path
+import sentence_parser
+import pdfplumber
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -15,3 +17,7 @@ if __name__ == "__main__":
         exit()
     
     print("Processing file: " + args.file)
+
+    # open file
+    pdf = sentence_parser.open_pdf(file_path)
+    sentence_parser.extract_text(pdf)
