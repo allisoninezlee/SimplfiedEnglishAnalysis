@@ -21,4 +21,5 @@ if __name__ == "__main__":
     # open file
     pdf = sentence_parser.open_pdf(file_path)
     text = sentence_parser.extract_text(pdf)
-    sentence_parser.get_sentences(text)
+    # right now it just puts sentences into an array
+    total_sentences = sentence_parser.get_sentences(text)
