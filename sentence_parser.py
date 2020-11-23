@@ -77,8 +77,5 @@ def get_sentences(page_text):
         for sentence in sentences:
             if (sentence[-1].text == '.'):
                 total_sentences.append(sentence)
-                print(sentence)
 
     return total_sentences
-
-# if __name__ == "__main__":

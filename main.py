@@ -2,7 +2,7 @@ import argparse
 import os
 from os import path
 import sentence_parser
-import pdfplumber
+import noun_parser
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -21,5 +21,8 @@ if __name__ == "__main__":
     # open file
     pdf = sentence_parser.open_pdf(file_path)
     text = sentence_parser.extract_text(pdf)
+
     # right now it just puts sentences into an array
     total_sentences = sentence_parser.get_sentences(text)
+
+    noun_parser.get_nouns(total_sentences)
