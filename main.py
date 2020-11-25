@@ -1,6 +1,7 @@
 import argparse
 import os
 from os import path
+import parsers
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -15,3 +16,15 @@ if __name__ == "__main__":
         exit()
     
     print("Processing file: " + args.file)
+
+    # open file
+    pdf = parsers.open_pdf(file_path)
+    text = parsers.extract_text(pdf)
+
+    # right now it just puts sentences into an array
+    total_sentences = parsers.get_sentences(text)
+
+    # this takes the sentence arrays and puts nouns into a dictionary
+    noun_dict = parsers.get_nouns(total_sentences)
+    
+    print(noun_dict)
