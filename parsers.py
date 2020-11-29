@@ -10,6 +10,7 @@ from os import path
 import pdfplumber
 import re
 import spacy
+import extensions
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 function: open_pdf
@@ -62,7 +63,7 @@ separated by '.'
 
 parameters: page_text, a list of text
 
-returns: a list of the Span object from the spacy library, 
+returns: a list of the Span objects from the spacy library, 
 representing each sentence. 
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 def get_sentences(page_text):
@@ -75,6 +76,7 @@ def get_sentences(page_text):
 
         # append the span objects to the total_sentences list
         for sentence in sentences:
+            sentence._.document = 'document_1'   # set parent document (hard code until program accepts multiple files)
             if (sentence[-1].text == '.'):
                 total_sentences.append(sentence)
 
@@ -88,19 +90,32 @@ and keeps track of the sentences that they are in
 
 parameters: sentences, a list of span objects
 
-returns: a dictionary of noun-sentence pairs
+returns: a list of token objects where each token is a unique noun
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 def get_nouns(sentences):
-    nouns_dict = {}
+    total_nouns = []   # list of objects for nouns
+    total_nouns_text = []   # list of these nouns as strings
     #nlp = spacy.load("en_core_web_sm")
 
-    for sentence in sentences: 
+    for sentence in sentences:
         for token in sentence:
             if token.pos_ == 'NOUN':
-                if token.text in nouns_dict:
-                    # if it is in the dictionary already, simply add the sentence
-                    nouns_dict[token.text].append(sentence)
-                else:
-                    nouns_dict[token.text] = [sentence]
 
-    return nouns_dict
+                if token.text in total_nouns_text:
+                    # if noun has appeared before, simply add this sentence to the noun's context sentences and
+                    # increment # of occurrences
+                    token._.context_sentences.append(sentence)
+                    token._.num_occur += 1
+                else:
+                    # otherwise, append the new noun to the list of noun objects and noun strings,
+                    # as well as add the context sentence
+                    total_nouns.append(token)
+                    total_nouns_text.append(token.text)
+                    token._.context_sentences.append(sentence)
+
+                if token.text not in sentence._.noun_token_text:
+                    # if sentence object doesn't have this noun in its noun lists yet, then add it to the lists
+                    sentence._.noun_token_objects.append(token)
+                    sentence._.noun_token_text.append(token.text)
+
+    return total_nouns
