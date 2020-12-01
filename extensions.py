@@ -6,4 +6,4 @@ Span.set_extension("noun_token_objects", default = [])   # list of objects for e
 Span.set_extension("noun_token_text", default = [])    # list of these nouns as strings
 
 Token.set_extension("context_sentences", default = [])   # list of objects for each sentence the noun appears in
-Token.set_extension("num_occur", default = 1)   # number of times the noun has appeared
+Token.set_extension("num_occur", default = 0)   # number of times the noun has appeared

@@ -3,6 +3,7 @@ import os
 from os import path
 import parsers
 import document
+import database
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -25,6 +26,12 @@ if __name__ == "__main__":
     # create document object for this pdf
     document_object = document.Document(pdf)
 
+    # Hard code Document attributes until we have an algorithm to get this info directly from reading PDF
+    document_object.document_name = 'Document 1'
+    document_object.pub_year = 2020
+    document_object.product = 'Airplane'
+    document_object.location = file_path
+
     # get list of span (sentence) objects - one for each sentence in pdf file
     total_sentences = parsers.get_sentences(text)
 
@@ -34,6 +41,26 @@ if __name__ == "__main__":
     total_nouns = parsers.get_nouns(total_sentences)
 
     for noun in total_nouns:
-        print(noun.text)
+        print(noun._.num_occur)
 
-    # add export to database next
+
+    # Get server information from user and create a new database in the server
+    (session_host, session_user, session_password) = database.get_server_info()
+    db_name = database.create_database(session_host, session_user, session_password)
+
+    # Create connection to this new database
+    connection = database.connect_database(session_host, session_user, session_password, db_name)
+
+    # Create tables in database & store database connection object for further use
+    database.create_tables(connection)
+
+    # Insert information into tables
+    database.insert_documents(document_object, connection)
+    database.insert_sentences(total_sentences, connection)
+    database.insert_nouns(total_nouns, connection)
+    #database.insert_noun_in_sent()   # work in progress
+
+    connection.close()
+
+    print("Data has been successfully exported to the database %s", db_name)
+

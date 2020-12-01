@@ -100,12 +100,11 @@ def get_nouns(sentences):
     for sentence in sentences:
         for token in sentence:
             if token.pos_ == 'NOUN':
-
+                token._.num_occur += 1
                 if token.text in total_nouns_text:
                     # if noun has appeared before, simply add this sentence to the noun's context sentences and
                     # increment # of occurrences
                     token._.context_sentences.append(sentence)
-                    token._.num_occur += 1
                 else:
                     # otherwise, append the new noun to the list of noun objects and noun strings,
                     # as well as add the context sentence

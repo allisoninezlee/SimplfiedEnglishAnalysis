@@ -20,6 +20,11 @@ pip install pdfplumber
 pip install spacy 
 python -m spacy download en_core_web_sm
 ```
+* mysql.connector:
+https://dev.mysql.com/doc/connector-python/en/
+```
+pip install mysql-connector-python
+```
 
 ## Explanation of Internal Data Structures:
 We will primarily be creating objects out of the 3 types of containers spaCy includes: Doc, Span, and Token. 
@@ -48,3 +53,8 @@ has the word stored as a string, the Doc (page) the word came from, the number o
 Span objects - one for each sentence the noun appears in.
 https://spacy.io/api/token
 
+# Installing programs for MySQL:
+Visit https://dev.mysql.com/downloads/ and download the following:
+* MySQL Community Server
+* MySQL Workbench
+* Connector/Python
