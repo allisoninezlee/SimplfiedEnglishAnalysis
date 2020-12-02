@@ -3,6 +3,8 @@ from getpass import getpass # Note: getpass() will give a warning if code is run
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
+from document import Document
+from noun import Noun
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 function: get_server_info
@@ -103,16 +105,15 @@ parameters: The document object and the database connection object
 
 returns: None
 '''''''''''''''''''''''''''''''''''''''''''''''''''
-def insert_documents(document_object, connection):
+def insert_documents(document, connection):
 
   cursor = connection.cursor()
   query = "INSERT INTO document (document_name, publication_year, product, location) VALUES (%s, %s, %s, %s)"
-  args = (document_object.document_name, document_object.pub_year, document_object.product, document_object.location)
+  args = (document.document_name, document.pub_year, document.product, document.location)
 
   try:
     cursor.execute(query, args)
     connection.commit()
-    print("Success")
 
   except Error as error:
     print(error)
@@ -134,9 +135,8 @@ def insert_sentences(total_sentences, connection):
   query = "INSERT INTO sentence (sentence_text, document_id) VALUES (%s, %s)"
 
   for sentence in total_sentences:
-    args = (sentence.text, 1)    # hard code for now since we are only doing 1 document at a time
-
     try:
+      args = (sentence.text, 1)   # Hard code for now until we accept multiple documents
       cursor.execute(query, args)
       connection.commit()
 
@@ -160,7 +160,7 @@ def insert_nouns(total_nouns, connection):
   query = "INSERT INTO noun (noun_text, num_occur) VALUES (%s, %s)"
 
   for noun in total_nouns:
-    args = (noun.text, noun._.num_occur)
+    args = (noun.text, noun.num_occur)
 
     try:
       cursor.execute(query, args)
