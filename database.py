@@ -2,7 +2,6 @@ from datetime import *
 from getpass import getpass # Note: getpass() will give a warning if code is run on IDLE instead of a terminal
 import mysql.connector
 from mysql.connector import Error
-from mysql.connector import errorcode
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 function: get_server_info
@@ -48,7 +47,7 @@ def create_database(session_host, session_user, session_password):
 
   #Create new database
   cursor = connection.cursor()
-  cursor.execute("DROP DATABASE IF EXISTS `%s`" % (db_name)) #include backticks to allow hyphens in name
+  cursor.execute("DROP DATABASE IF EXISTS `%s`" % (db_name))
   cursor.execute("CREATE DATABASE `%s`" % (db_name))
 
   cursor.close()
@@ -103,16 +102,15 @@ parameters: The document object and the database connection object
 
 returns: None
 '''''''''''''''''''''''''''''''''''''''''''''''''''
-def insert_documents(document_object, connection):
+def insert_documents(document, connection):
 
   cursor = connection.cursor()
   query = "INSERT INTO document (document_name, publication_year, product, location) VALUES (%s, %s, %s, %s)"
-  args = (document_object.document_name, document_object.pub_year, document_object.product, document_object.location)
+  args = (document.document_name, document.pub_year, document.product, document.location)
 
   try:
     cursor.execute(query, args)
     connection.commit()
-    print("Success")
 
   except Error as error:
     print(error)
@@ -134,9 +132,8 @@ def insert_sentences(total_sentences, connection):
   query = "INSERT INTO sentence (sentence_text, document_id) VALUES (%s, %s)"
 
   for sentence in total_sentences:
-    args = (sentence.text, 1)    # hard code for now since we are only doing 1 document at a time
-
     try:
+      args = (sentence.text, 1)   # Hard code for now until we accept multiple documents
       cursor.execute(query, args)
       connection.commit()
 
@@ -160,7 +157,7 @@ def insert_nouns(total_nouns, connection):
   query = "INSERT INTO noun (noun_text, num_occur) VALUES (%s, %s)"
 
   for noun in total_nouns:
-    args = (noun.text, noun._.num_occur)
+    args = (noun.text, noun.num_occur)
 
     try:
       cursor.execute(query, args)
@@ -178,11 +175,38 @@ function: insert_noun_in_sent
 description: Inserts foreign keys into noun_in_sentence table to complete
 the relational database
 
-parameters: TBD
+parameters: list of noun objects, connection to database
 
-returns: TBD
+returns: None
+
+*Note: This can be combined later with insert_nouns() to remove a for-loop 
+       and improve running time. Will leave it like this for now so we can
+       easily understand how each table is filled
 '''''''''''''''''''''''''''''''''''''''''''''''''''
-def insert_noun_in_sent():
-  # Work in progress
-  pass
+def insert_noun_in_sent(total_nouns, connection):
+  # for each noun in the noun objects:
+  #     get the its noun_id from the noun table
+  #     for each context sentence of that noun:
+  #         get its sentence_id from the sentence table
+  #         get the document's doc_id from the sentence table
+  #         insert entry into noun_in_sentence table
 
+  cursor = connection.cursor()
+
+  for noun in total_nouns:
+    try:
+      cursor.execute("SELECT noun_id FROM noun WHERE noun_text = %s", (noun.text,))
+      noun_id = cursor.fetchall()[0][0]   # MySQL will return this as [(noun_id,)], so grab just the element
+
+      for sentence in noun.context_sentences:
+        cursor.execute("SELECT sentence_id, document_id FROM sentence WHERE sentence_text = %s", (sentence.text,))
+        (sentence_id, document_id) = cursor.fetchall()[0]
+
+        cursor.execute("INSERT INTO noun_in_sentence (noun_id, sentence_id, document_id) VALUES (%s, %s, %s)", (noun_id, sentence_id, document_id))
+        connection.commit()
+
+    except Error as error:
+      print(error)
+
+  cursor.close()
+  return
