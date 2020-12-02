@@ -6,5 +6,5 @@ class Document:
         self.pub_year = pub_year
         self.product = product
         self.location = location
-        self.sentence_objects = []
+        #self.sentence_objects = []   # will use this once our program accepts multiple documents at a time
 

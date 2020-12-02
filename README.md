@@ -27,10 +27,8 @@ pip install mysql-connector-python
 ```
 
 ## Explanation of Internal Data Structures:
-We will primarily be creating objects out of the 3 types of containers spaCy includes: Doc, Span, and Token. 
-We will also use a class for documents, which differs slightly from the Doc container. Note that custom
-attributes were created for the Span and Token containers, and can be found in the extensions.py file. Below is a 
-summary of the data structures and where to find any spaCy documentation on them:
+We will be creating objects out of our own classes, as well as the 3 types of containers spaCy includes: Doc, Span, 
+and Token. Below is a summary of the data structures and where to find any spaCy documentation on them:
 
 Document objects will be used to store information about the document(s) the user uploads. This includes the document's
 name, its publication year, the product it is written about, its location, and a list of sentence/span objects found
@@ -48,10 +46,13 @@ a list of the nouns as strings (to make comparing the nouns easier/more time eff
 https://spacy.io/api/span
 
 The Span objects can be divided into Tokens. While parsing, a Token object will be created for each word in the
-sentence. However, we will primarily be focusing on Tokens the algorithm recognizes as nouns. Each Token object
-has the word stored as a string, the Doc (page) the word came from, the number of times it has appeared, and a list of 
-Span objects - one for each sentence the noun appears in.
+sentence. 
 https://spacy.io/api/token
+
+Tokens will then be analyzed to determine if they are a noun or not. If the token is a noun, a noun object will
+be created for that specific noun. Each noun object has the word stored as a string, the number of times it has 
+appeared, and a list of Span objects - one for each sentence the noun appears in.
+(See noun.py file for more info)
 
 # Installing programs for MySQL:
 Visit https://dev.mysql.com/downloads/ and download the following:

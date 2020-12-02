@@ -11,7 +11,6 @@ from noun import Noun
 import pdfplumber
 import re
 import spacy
-import extensions
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 function: open_pdf
@@ -77,7 +76,6 @@ def get_sentences(page_text):
 
         # append the span objects to the total_sentences list
         for sentence in sentences:
-            sentence._.document_name = 'Document 1'   # set parent document (hard code until program accepts multiple files)
             if (sentence[-1].text == '.'):
                 total_sentences.append(sentence)
 
@@ -94,7 +92,7 @@ parameters: sentences, a list of span objects
 returns: a list of noun objects 
 '''''''''''''''''''''''''''''''''''''''''''''''''''
 def get_nouns(sentences):
-    total_nouns = []   # list of objects for nouns
+    total_nouns = []   # list of noun objects
     #nlp = spacy.load("en_core_web_sm")
 
     for sentence in sentences:
@@ -115,10 +113,5 @@ def get_nouns(sentences):
                     # if not, we'll create a new noun object for it
                     new_noun = Noun(token.text, sentence)
                     total_nouns.append(new_noun)
-
-                #if token.text not in sentence._.noun_token_text:
-                    # if sentence object doesn't have this noun in its noun lists yet, then add it to the lists
-                    #sentence._.noun_token_objects.append(token)
-                    #sentence._.noun_token_text.append(token.text)
 
     return total_nouns
