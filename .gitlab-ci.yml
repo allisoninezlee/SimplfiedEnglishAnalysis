@@ -11,7 +11,7 @@ build_main:
         - echo "This job builds main"
         
 build_noun:
-    stage:build
+    stage: build
     script:
         - echo "This job builds noun"
         
