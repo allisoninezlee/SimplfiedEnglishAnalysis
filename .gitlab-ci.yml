@@ -22,6 +22,8 @@ build_parsers:
         - echo "This job builds parsers"
 
 build_database:
+    services:
+        - mysql
     stage: build
     script:
         - echo "This job builds database"
@@ -48,6 +50,8 @@ test_parsers:
 
 test_database:
     stage: test
+    services:
+        - mysql
     script:
         - echo "This job tests database. It only runs when all jobs in the build stage are complete."
 
@@ -74,6 +78,8 @@ deploy_parsers:
         
 deploy_database:
     stage: deploy
+    services:
+        - mysql
     script:
         - echo "This job deploys database when all jobs in test stage are complete"
         
