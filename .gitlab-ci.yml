@@ -1,0 +1,84 @@
+stages:
+    - build
+    - test
+    - deploy
+    
+image: python:3.7
+
+build_main:
+    stage: build
+    script:
+        - echo "This job builds main"
+        
+build_noun:
+    stage:build
+    script:
+        - echo "This job builds noun"
+        
+
+build_parsers:
+    stage:build
+    script:
+        - echo "This job builds parsers"
+
+build_database:
+    stage: build
+    script:
+        - echo "This job builds database"
+
+build_document:
+    stage: build
+    script:
+        - echo "This job builds document"
+
+test_main:
+    stage:test
+    script:
+        - echo "This job tests main. It only runs when all jobs in the build stage are complete."
+        
+test_noun:
+    stage:test
+    script:
+        - echo "This job tests noun. It only runs when all jobs in the build stage are complete."
+
+test_parsers:
+    stage:test
+    script:
+        - echo "This job tests parsers. It only runs when all jobs in the build stage are complete."
+
+test_database:
+    stage:test
+    script:
+        - echo "This job tests database. It only runs when all jobs in the build stage are complete."
+
+test_document:
+    stage:test
+    script:
+        - echo "This job tests document. It only runs when all jobs in the build stage are complete."
+        
+        
+deploy_main:
+    stage:deploy
+    script:
+        - echo "This job deploys main when all jobs in test stage are complete" 
+        
+deploy_noun:
+    stage:deploy
+    script:
+        - echo "This job deploys noun when all jobs in test stage are complete"
+        
+deploy_parsers:
+    stage:deploy
+    script:
+        - echo "This job deploys parsers when all jobs in test stage are complete"
+        
+deploy_database:
+    stage:deploy
+    script:
+        - echo "This job deploys database when all jobs in test stage are complete"
+        
+deploy_document:
+    stage:deploy
+    script:
+        - echo "This job deploys document when all jobs in test stage are complete"
+        
