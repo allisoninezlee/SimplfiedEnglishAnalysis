@@ -17,7 +17,7 @@ build_noun:
         
 
 build_parsers:
-    stage:build
+    stage: build
     script:
         - echo "This job builds parsers"
 
@@ -32,53 +32,53 @@ build_document:
         - echo "This job builds document"
 
 test_main:
-    stage:test
+    stage: test
     script:
         - echo "This job tests main. It only runs when all jobs in the build stage are complete."
         
 test_noun:
-    stage:test
+    stage: test
     script:
         - echo "This job tests noun. It only runs when all jobs in the build stage are complete."
 
 test_parsers:
-    stage:test
+    stage: test
     script:
         - echo "This job tests parsers. It only runs when all jobs in the build stage are complete."
 
 test_database:
-    stage:test
+    stage: test
     script:
         - echo "This job tests database. It only runs when all jobs in the build stage are complete."
 
 test_document:
-    stage:test
+    stage: test
     script:
         - echo "This job tests document. It only runs when all jobs in the build stage are complete."
         
         
 deploy_main:
-    stage:deploy
+    stage: deploy
     script:
         - echo "This job deploys main when all jobs in test stage are complete" 
         
 deploy_noun:
-    stage:deploy
+    stage: deploy
     script:
         - echo "This job deploys noun when all jobs in test stage are complete"
         
 deploy_parsers:
-    stage:deploy
+    stage: deploy
     script:
         - echo "This job deploys parsers when all jobs in test stage are complete"
         
 deploy_database:
-    stage:deploy
+    stage: deploy
     script:
         - echo "This job deploys database when all jobs in test stage are complete"
         
 deploy_document:
-    stage:deploy
+    stage: deploy
     script:
         - echo "This job deploys document when all jobs in test stage are complete"
         
