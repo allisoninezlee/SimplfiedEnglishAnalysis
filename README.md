@@ -8,6 +8,7 @@ python3 main.py --file data/document.pdf
 ```
 Current cmd args implemented: 
 --file/-f   file for input
+--database/-d trigger database usage
 
 ## Module list:
 * pdfplumber:

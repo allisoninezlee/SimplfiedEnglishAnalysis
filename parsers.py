@@ -76,8 +76,8 @@ def get_sentences(page_text):
 
         # append the span objects to the total_sentences list
         for sentence in sentences:
-            if (sentence[-1].text == '.'):
-                total_sentences.append(sentence)
+            #if (sentence[-1].text == '.'):
+            total_sentences.append(sentence)
 
     return total_sentences
 
@@ -108,10 +108,10 @@ def get_nouns(sentences):
 
                 if found:
                     # if there's an object already, we'll update the object accordingly
-                    noun.add_occur(sentence)
+                    noun.add_occur(sentence.text.rstrip())
                 else:
                     # if not, we'll create a new noun object for it
-                    new_noun = Noun(token.text, sentence)
+                    new_noun = Noun(token.text, sentence.text.rstrip())
                     total_nouns.append(new_noun)
 
     return total_nouns
