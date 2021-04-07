@@ -94,15 +94,24 @@ returns: a list of noun objects
 def get_nouns(sentences):
     total_nouns = []   # list of noun objects
     #nlp = spacy.load("en_core_web_sm")
+    #lemmatizer = nlp.add_pipe("lemmatizer")
+    #lemmatizer = nlp.add_pipe("lemmatizer", config={"mode": "rule", "overwrite": True})
 
     for sentence in sentences:
         for token in sentence:
-            if token.pos_ == 'NOUN':
+            # Skips over numbers
+            if token.like_num:
+                continue
+
+            if token.pos_ == 'NOUN' or token.pos_ == 'PROPN':
+                # Process noun
+                noun_text = token.lemma_ # First take the lemma
+                noun_text = noun_text.lower() # Make it lower case
 
                 # Now determine if this noun has already had an object created for it or not
                 found = False
                 for noun in total_nouns:
-                    if noun.text == token.text:
+                    if noun.text == noun_text:
                         found = True
                         break
 
@@ -111,7 +120,16 @@ def get_nouns(sentences):
                     noun.add_occur(sentence.text.rstrip())
                 else:
                     # if not, we'll create a new noun object for it
-                    new_noun = Noun(token.text, sentence.text.rstrip())
+                    new_noun = Noun(noun_text, sentence.text.rstrip())
                     total_nouns.append(new_noun)
 
     return total_nouns
+
+def get_noun_phrases(sentences, total_nouns):
+
+    for sentence in sentences:
+        for noun_chunk in sentence.noun_chunks: # for each noun phrase (referred to as "chunks" in spaCy) in the sentence
+            for noun in total_nouns: # find the corresponding noun object
+                if noun_chunk.root.text == noun.text:
+                    noun.add_phrase(noun_chunk.text.rstrip()) # add the phrase to its noun phrases list
+    return

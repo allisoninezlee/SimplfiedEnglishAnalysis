@@ -102,11 +102,16 @@ parameters: The document object and the database connection object
 
 returns: None
 '''''''''''''''''''''''''''''''''''''''''''''''''''
-def insert_documents(document, connection):
+def insert_documents(docAttributes, connection):
 
   cursor = connection.cursor()
-  query = "INSERT INTO document (document_name, publication_year, product, location) VALUES (%s, %s, %s, %s)"
-  args = (document.document_name, document.pub_year, document.product, document.location)
+
+  # DELETE THESE LATER
+  # query = "INSERT INTO document (Title, CreationDate, Author) VALUES (%s, %s, %s)"
+  # args = (document.Title, document.CreationDate, document.Author)
+
+  query = "INSERT INTO document ALL ATTRIBUTES FROM file_path"
+  args = tuple(docAttributes)
 
   try:
     cursor.execute(query, args)

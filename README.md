@@ -1,14 +1,25 @@
 # alpha_prototype
 
+Update March 31, 2021
 This repository will contain all source code for our initial Text Analysis prototype.
 
+## Installation
+To download the necessary modules: 
+```
+pip install -r requirements.txt
+```
+Then, download the necessary framework:
+```
+python -m spacy download en_core_web_sm
+```
 ## Example Usage
 ```
-python3 main.py --file data/document.pdf
+python3 main.py --file data/document.pdf --database  : runs with the database
+python3 main.py --file data/document.pdf : runs without the database
 ```
 Current cmd args implemented: 
 --file/-f   file for input
---database/-d trigger database usage
+--database/-d boolean flag to use the database or not
 
 ## Module list:
 * pdfplumber:
@@ -25,6 +36,10 @@ python -m spacy download en_core_web_sm
 https://dev.mysql.com/doc/connector-python/en/
 ```
 pip install mysql-connector-python
+```
+* PyPDF2: https://pypi.org/project/PyPDF2/
+```
+pip install PyPDF2
 ```
 
 ## Explanation of Internal Data Structures:
@@ -60,3 +75,50 @@ Visit https://dev.mysql.com/downloads/ and download the following:
 * MySQL Community Server
 * MySQL Workbench
 * Connector/Python
+
+# Postman Set up
+Click Import and choose Raw text.
+Paste:
+
+curl --location --request POST 'http://161.35.254.149/uploads' \
+--header 'Content-Type: multipart/form-data; boundary=---011000010111000001101001' \
+--form 'file=@"/path/to/file"'
+
+Click continue.
+
+In the main page, look for "Body", it's in between "Headers" and "Pre-request Script", click "Body".
+
+There will be an existing value and a key. Delete the whole line (When you put your cruisor on the line, the right end of the line will have an "X", click on it).
+
+Put your cruisor on top of the key and there will be a "Text" appearing on the right side of the cell. 
+
+Click "Text", and change it to file.
+
+Click the first cell of the line, type "file".
+
+In the middle cell of the line, there is a "Select files" button, click on it and choose your pdf file(Just in case it crashes the program with other files, it's set with pdf files only).
+
+Before sending it, go to settings in Postman (Usually it's at the top right).
+
+In General, scroll down and turn on the "Allow reading files outisde working directory".
+
+Now you are all set, click send and wait for the response!
+
+After successfully ran the program on the server, it generates an output.
+
+An output will be:
+
+{
+
+    "data": {
+        "downloadlink": "http://161.35.254.149/downloads/.....",
+        "success": true
+    }
+    
+}
+
+Copy and past the link on a browser to download the csv file. 
+
+
+# How it works
+It is set up with python flask, it uses "/uploads" as the keyword for POST method and "file" as the request file keyword. After running the program on the server, it generates an output link for user to download. The type of file is set to PDF, files other than PDFs are not accepted. 

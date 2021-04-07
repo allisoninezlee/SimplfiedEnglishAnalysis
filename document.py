@@ -7,4 +7,3 @@ class Document:
         self.product = product
         self.location = location
         #self.sentence_objects = []   # will use this once our program accepts multiple documents at a time
-
